@@ -273,6 +273,9 @@ namespace U3DExtends
 
         public static Texture GetAssetPreview(GameObject obj)
         {
+            Texture texs = new Texture2D(128,128);
+            texs = Texture2D.redTexture;
+            return texs;
             GameObject canvas_obj = null;
             GameObject clone = GameObject.Instantiate(obj);
             Transform cloneTransform = clone.transform;
@@ -297,7 +300,6 @@ namespace U3DExtends
             {
                 trans.gameObject.layer = 21;
             }
-
             Bounds bounds = GetBounds(clone);
             Vector3 Min = bounds.min;
             Vector3 Max = bounds.max;
