@@ -266,14 +266,14 @@ public class ArtSceneTools
                 if (draggeds != null)
                 {
                     Debug.Log("------------");
-                    if (_selections != null)
-                    {
-                        foreach (var selection in _selections)
-                        {
-                            DestroyTexture(selection);
-                            mItems.Remove(selection);
-                        }
-                    }
+                    // if (_selections != null)
+                    // {
+                    //     foreach (var selection in _selections)
+                    //     {
+                    //         DestroyTexture(selection);
+                    //         mItems.Remove(selection);
+                    //     }
+                    // }
                     
                     foreach (var dragged in draggeds)
                     {
@@ -332,56 +332,56 @@ public class ArtSceneTools
                     #region MyRegion
                     
                     string searchFilter = EditorPrefs.GetString("PrefabWin_SearchFilter", null);
+                    
+                    for (int i = 0; i < mItems.size; )
+                    {
+                        // if (draggeds != null && indices.size == indexUnderMouse)
+                        //     indices.Add(-1);
+
+                        var has = _selections.Exists(item => item == mItems[i]);
+			
+                        if (!has)
+                        {
+                            if (string.IsNullOrEmpty(searchFilter) ||
+                                mItems[i].prefab.name.IndexOf(searchFilter, System.StringComparison.CurrentCultureIgnoreCase) != -1)
+                                indices.Add(i);
+                        }
+			
+                        ++i;
+                    }
+
+                    // if (!indices.Contains(-1)) indices.Add(-1);
+
+                    if (eligibleToDrag && eventType == EventType.MouseDown && indexUnderMouse > -1)
+                    {
+                        GUIUtility.keyboardControl = 0;
+
+                        if (currentEvent.button == 0 && indexUnderMouse < indices.size)
+                        {
+                            int index = indices[indexUnderMouse];
+
+                            if (index != -1 && index < mItems.size)
+                            {
+                                _selections.Add(mItems[index]);
+                                draggedObjects = _selections.Select(item => item.prefab).ToArray();
+                                draggeds = _selections.Select(item=>item.prefab).ToArray();
+                                currentEvent.Use();
+                            }
+                        }
+                    }
 
                     mPos = EditorGUILayout.BeginScrollView(mPos);
                     {
-                        for (int i = 0; i < mItems.size; )
-                        {
-                            if (draggeds != null && indices.size == indexUnderMouse)
-                                indices.Add(-1);
-
-                            var has = _selections.Exists(item => item == mItems[i]);
-			
-                            if (!has)
-                            {
-                                if (string.IsNullOrEmpty(searchFilter) ||
-                                    mItems[i].prefab.name.IndexOf(searchFilter, System.StringComparison.CurrentCultureIgnoreCase) != -1)
-                                    indices.Add(i);
-                            }
-			
-                            ++i;
-                        }
-
-                        if (!indices.Contains(-1)) indices.Add(-1);
-
-                        if (eligibleToDrag && eventType == EventType.MouseDown && indexUnderMouse > -1)
-                        {
-                            GUIUtility.keyboardControl = 0;
-
-                            if (currentEvent.button == 0 && indexUnderMouse < indices.size)
-                            {
-                                int index = indices[indexUnderMouse];
-
-                                if (index != -1 && index < mItems.size)
-                                {
-                                    _selections.Add(mItems[index]);
-                                    draggedObjects = _selections.Select(item => item.prefab).ToArray();
-                                    draggeds = _selections.Select(item=>item.prefab).ToArray();
-                                    currentEvent.Use();
-                                }
-                            }
-                        }
-                        
                         Color normal = new Color(1f, 1f, 1f, 0.5f);
-                        for (int i = 0; i < indices.size; ++i)
+                        for (int i = 0; i < mItems.size; ++i)
                         {
-                            int index = indices[i];
-                            Item ent = (index != -1) ? mItems[index] :
-                                _selections.Count == 0 ? null : _selections[0];
+                            // int index = indices[i];
+                            // Item ent = (index != -1) ? mItems[i] : _selections.Count == 0 ? null : _selections[0];
+                            Item ent =  mItems[i] ;
 
                             if (ent != null && ent.prefab == null)
                             {
-                                mItems.RemoveAt(index);
+                                mItems.RemoveAt(i);
                                 continue;
                             }
 
@@ -408,33 +408,33 @@ public class ArtSceneTools
 
                             if (GUI.Button(rect, mContent, "Button"))
                             {
-                                if (ent == null || currentEvent.button == 0)
-                                {
-                                    string path = EditorUtility.OpenFilePanel("Add a prefab", "", "prefab");
-
-                                    if (!string.IsNullOrEmpty(path))
-                                    {
-                                        Item newEnt = CreateItemByPath(path);
-
-                                        if (newEnt != null)
-                                        {
-                                            mItems.Add(newEnt);
-                                            Save();
-                                        }
-                                    }
-                                }
-                                else if (currentEvent.button == 1)
-                                {
-                                    // ContextMenu.AddItem("Update Preview", false, UpdatePreView, index);
-                                     ContextMenu.AddItemWithArge("Delete", false, RemoveItem, index);
-                                     ContextMenu.Show();
-                                }
+                                // if (ent == null || currentEvent.button == 0)
+                                // {
+                                //     string path = EditorUtility.OpenFilePanel("Add a prefab", "", "prefab");
+                                //
+                                //     if (!string.IsNullOrEmpty(path))
+                                //     {
+                                //         Item newEnt = CreateItemByPath(path);
+                                //
+                                //         if (newEnt != null)
+                                //         {
+                                //             mItems.Add(newEnt);
+                                //             Save();
+                                //         }
+                                //     }
+                                // }
+                                // else if (currentEvent.button == 1)
+                                // {
+                                //     // ContextMenu.AddItem("Update Preview", false, UpdatePreView, index);
+                                //      ContextMenu.AddItemWithArge("Delete", false, RemoveItem, index);
+                                //      ContextMenu.Show();
+                                // }
                             }
 
                             string caption = (ent == null) ? "" : ent.prefab.name.Replace("Control - ", "");
 
-                            if (ent != null)
-                            {
+                            // if (ent != null)
+                            // {
                                 if (ent.tex == null)
                                 {
                                     //texture may be destroy after exit game
@@ -461,8 +461,8 @@ public class ArtSceneTools
                                     GUI.Label(inner, caption, mStyle);
                                     caption = "";
                                 }
-                            }
-                            else GUI.Label(inner, "Add", mStyle);
+                            // }
+                            // else GUI.Label(inner, "Add", mStyle);
 
                             if (mMode == Mode.DetailedMode)
                             {
@@ -487,23 +487,23 @@ public class ArtSceneTools
                     }
                     EditorGUILayout.EndScrollView();
                     
-                        GUILayout.BeginHorizontal();
-                        {
-                            string after = EditorGUILayout.TextField("", searchFilter, "SearchTextField", GUILayout.Width(250));
-
-                            if (GUILayout.Button("", "SearchCancelButton", GUILayout.Width(18f)))
-                            {
-                                after = "";
-                                GUIUtility.keyboardControl = 0;
-                            }
-
-                            if (searchFilter != after)
-                            {
-                                EditorPrefs.SetString("PrefabWin_SearchFilter", after);
-                                searchFilter = after;
-                            }
-                        }
-                        GUILayout.EndHorizontal();
+                        // GUILayout.BeginHorizontal();
+                        // {
+                        //     string after = EditorGUILayout.TextField("", searchFilter, "SearchTextField", GUILayout.Width(250));
+                        //
+                        //     if (GUILayout.Button("", "SearchCancelButton", GUILayout.Width(18f)))
+                        //     {
+                        //         after = "";
+                        //         GUIUtility.keyboardControl = 0;
+                        //     }
+                        //
+                        //     if (searchFilter != after)
+                        //     {
+                        //         EditorPrefs.SetString("PrefabWin_SearchFilter", after);
+                        //         searchFilter = after;
+                        //     }
+                        // }
+                        // GUILayout.EndHorizontal();
 
                     
 

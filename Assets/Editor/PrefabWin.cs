@@ -532,7 +532,7 @@ public class PrefabWin : EditorWindow
 			++i;
 		}
 
-		if (!indices.Contains(-1)) indices.Add(-1);
+		// if (!indices.Contains(-1)) indices.Add(-1);
 
 		if (eligibleToDrag && type == EventType.MouseDown && indexUnderMouse > -1)
 		{
@@ -589,33 +589,33 @@ public class PrefabWin : EditorWindow
 
 				if (GUI.Button(rect, mContent, "Button"))
 				{
-					if (ent == null || currentEvent.button == 0)
-					{
-                        string path = EditorUtility.OpenFilePanel("Add a prefab", "", "prefab");
-
-                        if (!string.IsNullOrEmpty(path))
-                        {
-                            Item newEnt = CreateItemByPath(path);
-
-                            if (newEnt != null)
-                            {
-                                mItems.Add(newEnt);
-                                Save();
-                            }
-                        }
-					}
-					else if (currentEvent.button == 1)
-					{
+					// if (ent == null || currentEvent.button == 0)
+					// {
+                        // string path = EditorUtility.OpenFilePanel("Add a prefab", "", "prefab");
+                        //
+                        // if (!string.IsNullOrEmpty(path))
+                        // {
+                        //     Item newEnt = CreateItemByPath(path);
+                        //
+                        //     if (newEnt != null)
+                        //     {
+                        //         mItems.Add(newEnt);
+                        //         Save();
+                        //     }
+                        // }
+					// }
+					// else if (currentEvent.button == 1)
+					// {
                         //ContextMenu.AddItem("Update Preview", false, UpdatePreView, index);
                         ContextMenu.AddItemWithArge("Delete", false, RemoveItem, index);
                         ContextMenu.Show();
-                    }
+                    // }
 				}
 
 				string caption = (ent == null) ? "" : ent.prefab.name.Replace("Control - ", "");
 
-				if (ent != null)
-				{
+				// if (ent != null)
+				// {
                     if (ent.tex == null)
 					{
                         //texture may be destroy after exit game
@@ -641,8 +641,8 @@ public class PrefabWin : EditorWindow
 						GUI.Label(inner, caption, mStyle);
 						caption = "";
 					}
-				}
-				else GUI.Label(inner, "Add", mStyle);
+				// }
+				// else GUI.Label(inner, "Add", mStyle);
 
 				if (mMode == Mode.DetailedMode)
 				{
@@ -677,27 +677,27 @@ public class PrefabWin : EditorWindow
             //EditorGUILayout.EndHorizontal();
         }
         //else if (mTab != 0)
-        {
-            GUILayout.BeginHorizontal();
-            {
-                string after = EditorGUILayout.TextField("", searchFilter, "SearchTextField", GUILayout.Width(Screen.width - 20f));
-
-                if (GUILayout.Button("", "SearchCancelButton", GUILayout.Width(18f)))
-                {
-                    after = "";
-                    GUIUtility.keyboardControl = 0;
-                }
-
-                if (searchFilter != after)
-                {
-                    EditorPrefs.SetString("PrefabWin_SearchFilter", after);
-                    searchFilter = after;
-                }
-            }
-            GUILayout.EndHorizontal();
-        }
-
-        SizePercent = EditorGUILayout.Slider(SizePercent, 0, 1);
+        // {
+        //     GUILayout.BeginHorizontal();
+        //     {
+        //         string after = EditorGUILayout.TextField("", searchFilter, "SearchTextField", GUILayout.Width(Screen.width - 20f));
+        //
+        //         if (GUILayout.Button("", "SearchCancelButton", GUILayout.Width(18f)))
+        //         {
+        //             after = "";
+        //             GUIUtility.keyboardControl = 0;
+        //         }
+        //
+        //         if (searchFilter != after)
+        //         {
+        //             EditorPrefs.SetString("PrefabWin_SearchFilter", after);
+        //             searchFilter = after;
+        //         }
+        //     }
+        //     GUILayout.EndHorizontal();
+        // }
+        //
+        // SizePercent = EditorGUILayout.Slider(SizePercent, 0, 1);
     }
 }
 }
